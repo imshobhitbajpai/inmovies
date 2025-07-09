@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:hive/hive.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -38,4 +39,9 @@ class MovieModel extends HiveObject {
       _$MovieModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$MovieModelToJson(this);
+
+  @override
+  String toString() {
+    return 'MovieModel(id: $id, title: $title, posterPath: $posterPath, overview: $overview, isBookmarked: $isBookmarked, category: $category)';
+  }
 }

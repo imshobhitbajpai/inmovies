@@ -89,18 +89,18 @@ class MovieRepositoryImpl implements MovieRepository {
   @override
   Future<MovieModel> getMovieDetail(int id) async {
     try {
-      final movie = await remote.getMovieDetail(id);
-      return movie;
-    } catch (e) {
-      debugPrint("### getMovieDetail Exception: ${e.toString()} ###");
-      final movie = local.getUniqueCachedMovies().firstWhereOrNull(
+      final localMovie = local.getUniqueCachedMovies().firstWhereOrNull(
         (m) => m.id == id,
       );
-      if (movie != null) {
-        return movie;
+      if (localMovie != null) {
+        return localMovie;
       } else {
-        throw 'No Movie Details Available';
+        final movie = await remote.getMovieDetail(id);
+        return movie;
       }
+    } catch (e) {
+      debugPrint("### getMovieDetail Exception: ${e.toString()} ###");
+      throw 'No Movie Details Available';
     }
   }
 }

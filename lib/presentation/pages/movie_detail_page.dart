@@ -2,7 +2,6 @@ import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:glass_kit/glass_kit.dart';
 import 'package:inshorts_movie_app_task/controllers/movie_detail_controller.dart';
 import 'package:inshorts_movie_app_task/core/network/tmdb_helper.dart';
@@ -23,7 +22,6 @@ class MovieDetailPage extends StatelessWidget {
     final movieDetailsController = MovieDetailController(movieId);
     return Obx(() {
       final MovieModel? movie = movieDetailsController.movie.value;
-
       if (movie == null) {
         return Scaffold(
           appBar: AppBar(),
@@ -72,6 +70,15 @@ class MovieDetailPage extends StatelessWidget {
                     movie: movie,
                     movieDetailControllder: movieDetailsController,
                   ),
+                  IconButton(
+                    onPressed: () {
+                      final link = "movieapp://movie/${movie.id}";
+                      final message =
+                          "Check out this movie: ${movie.title}\n$link";
+                      SharePlus.instance.share(ShareParams(text: message));
+                    },
+                    icon: Icon(Icons.share_rounded),
+                  ),
                 ],
               ),
               body: Column(
@@ -116,7 +123,7 @@ class MovieDetailPage extends StatelessWidget {
                             style: h1eadingTextStyle(),
                           ).withBottomPaddingSixteen(),
                           Text(
-                            'Adventure, Drama, Comedy (Fake)',
+                            'Drama, Comedy (Fake)',
                             style: h4TextStyle(),
                           ),
                           Row(
@@ -137,14 +144,16 @@ class MovieDetailPage extends StatelessWidget {
                                 Icons.circle_rounded,
                                 size: 12,
                               ).withOpacity().withRightPaddingFour(),
-                              Text('120 Minutes (Fake)').withRightPaddingEight(),
+                              Text(
+                                '120 Minutes (Fake)',
+                              ).withRightPaddingEight(),
                             ],
                           ).withBottomPaddingSixteen(),
-                          if(movie.overview != null)
-                          Text(
-                            movie.overview!,
-                            maxLines: 5,
-                          ).withBottomPaddingSixteen(),
+                          if (movie.overview != null)
+                            Text(
+                              movie.overview!,
+                              maxLines: 5,
+                            ).withBottomPaddingSixteen(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -156,17 +165,6 @@ class MovieDetailPage extends StatelessWidget {
                               OutlinedButton(
                                 onPressed: () {},
                                 child: Text('Trailer'),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  final link = "movieapp://movie/${movie.id}";
-                                  final message =
-                                      "Check out this movie: ${movie.title}\n$link";
-                                  SharePlus.instance.share(
-                                    ShareParams(text: message),
-                                  );
-                                },
-                                icon: Icon(Icons.share_rounded),
                               ),
                             ],
                           ),

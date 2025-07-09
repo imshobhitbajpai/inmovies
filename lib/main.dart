@@ -23,7 +23,9 @@ void handleDeepLink(AppLinks appLinks) {
     try {
       final int movieId = int.parse(uri.pathSegments.last);
       Future.delayed(Duration.zero, () {
+        Get.offAll(HomePage())?.then((v) {
         Get.to(MovieDetailPage(movieId: movieId));
+        });
       });
     } catch (e) {
       debugPrint("### Exception: ${e.toString()} ###");
